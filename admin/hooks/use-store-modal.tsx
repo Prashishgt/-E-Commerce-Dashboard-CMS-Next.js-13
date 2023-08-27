@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-const test = (e) => e.preventDefault();
 interface useStoreModalStore {
   isOpen: boolean;
   onOpen: () => void;
