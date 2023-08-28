@@ -13,7 +13,7 @@ const layout = async ({ children, params }: dashboardPropsI) => {
   const { userId } = auth();
 
   if (!userId) {
-    redirect("/sign-ing");
+    redirect("/sign-in");
   }
 
   const store = await prismaDb.store.findFirst({
