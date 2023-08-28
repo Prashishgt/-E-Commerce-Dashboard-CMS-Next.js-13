@@ -2,6 +2,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
 import prismaDb from "@/lib/prismadb";
+import Navbar from "@/components/Navbar";
 
 type dashboardPropsI = {
   children: React.ReactNode;
@@ -28,7 +29,7 @@ const layout = async ({ children, params }: dashboardPropsI) => {
 
   return (
     <>
-      <div>This will be navbar</div>
+      <Navbar />
       {children}
     </>
   );
