@@ -21,6 +21,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import AlertModal from "@/components/modals/alert-modal";
+import ApiAlert from "@/components/ui/api-alert";
+import { UserOrigin } from "@/hooks/user-origin";
 
 interface SettingsFormPropsI {
   initialData: Store;
@@ -34,6 +37,7 @@ const formSchema = z.object({
 const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
   const params = useParams();
   const router = useRouter();
+  const origin = UserOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,7 +51,6 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
     try {
       setLoading(true);
       await axios.patch(`/api/stores/${params.storeid}`, data);
-      console.log(data);
       router.refresh();
       toast.success("Store updated.");
     } catch (error) {
@@ -57,8 +60,32 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeid}`);
+      router.refresh();
+      router.push("/");
+      toast.success("Store Deleted");
+    } catch (error) {
+      toast.error(
+        "Make sure you remove all the products and category before attempting this action"
+      );
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
+
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
+
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences" />
         <Button
@@ -102,6 +129,12 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
           </Button>
         </form>
       </Form>
+      <Separator />
+      <ApiAlert
+        title="NEXT_PUBLIC_API_URL"
+        description={`${origin}/api/${params.storeid}`}
+        variant="public"
+      />
     </>
   );
 };
