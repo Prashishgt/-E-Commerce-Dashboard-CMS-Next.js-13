@@ -56,13 +56,20 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
       imageUrl: "",
     },
   });
-  console.log(`/api/stores/${params.storeid}`);
+  console.log(`/api/${params.storeid}/billboards`);
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeid}`, data);
+      if (!initialData) {
+        await axios.patch(
+          `/api/${params.storeid}/billboards/${params.billboardId}`,
+          data
+        );
+      } else {
+        await axios.post(`/api/${params.storeid}/billboards`, data);
+      }
       router.refresh();
-      toast.success("Store updated.");
+      toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -73,13 +80,15 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeid}`);
+      await axios.delete(
+        `/api/${params.storeid}/billboards/${params.billboardId}`
+      );
       router.refresh();
       router.push("/");
-      toast.success("Store Deleted");
+      toast.success("Billboard Deleted");
     } catch (error) {
       toast.error(
-        "Make sure you remove all the products and category before attempting this action"
+        "Make sure you remove all the category before attempting this action"
       );
     } finally {
       setLoading(false);
