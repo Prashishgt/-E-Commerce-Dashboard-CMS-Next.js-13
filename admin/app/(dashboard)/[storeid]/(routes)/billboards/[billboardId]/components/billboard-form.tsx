@@ -56,17 +56,18 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
       imageUrl: "",
     },
   });
-  console.log(`/api/${params.storeid}/billboards`);
+  console.log(`/api/${params.storeId}/billboards`);
+  console.log("I am here", `${params.billboardId}`);
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
       if (!initialData) {
         await axios.patch(
-          `/api/${params.storeid}/billboards/${params.billboardId}`,
+          `/api/${params.storeId}/billboards/${params.billboardId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeid}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/billboards`, data);
       }
       router.refresh();
       toast.success(toastMessage);
@@ -81,7 +82,7 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeid}/billboards/${params.billboardId}`
+        `/api/${params.storeId}/billboards/${params.billboardId}`
       );
       router.refresh();
       router.push("/");

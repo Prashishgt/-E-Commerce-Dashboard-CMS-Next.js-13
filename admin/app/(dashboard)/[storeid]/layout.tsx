@@ -11,7 +11,7 @@ type dashboardPropsI = {
 
 const layout = async ({ children, params }: dashboardPropsI) => {
   const { userId } = auth();
-
+  console.log("Inside store id", params.storeId);
   if (!userId) {
     redirect("/sign-in");
   }

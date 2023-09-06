@@ -20,6 +20,7 @@ const Navbar = async (props: Props) => {
     },
   });
 
+  console.log("Inside navbar", stores);
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">

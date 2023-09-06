@@ -46,7 +46,7 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherPropsI) => {
   }));
 
   const currentStore = formattedItems.find(
-    (item: any) => item.value === params.storeid
+    (item: any) => item.value === params.storeId
   );
 
   const [open, setOpen] = useState<boolean>(false);

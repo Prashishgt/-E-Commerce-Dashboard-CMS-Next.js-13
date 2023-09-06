@@ -46,11 +46,11 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
-  console.log(`/api/stores/${params.storeid}`);
+  console.log(`/api/stores/${params.storeId}`);
   const onSubmit = async (data: SettingsFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeid}`, data);
+      await axios.patch(`/api/stores/${params.storeId}`, data);
       router.refresh();
       toast.success("Store updated.");
     } catch (error) {
@@ -63,7 +63,7 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeid}`);
+      await axios.delete(`/api/stores/${params.storeId}`);
       router.refresh();
       router.push("/");
       toast.success("Store Deleted");
@@ -132,7 +132,7 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
       <Separator />
       <ApiAlert
         title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${params.storeid}`}
+        description={`${origin}/api/${params.storeId}`}
         variant="public"
       />
     </>

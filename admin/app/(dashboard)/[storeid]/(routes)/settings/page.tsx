@@ -6,12 +6,13 @@ import SettingsForm from "./components/settings-form";
 
 interface SettingPagePropsI {
   params: {
-    storeid: string;
+    storeId: string;
   };
 }
 
 const page = async ({ params }: SettingPagePropsI) => {
   const { userId } = auth();
+  console.log("Inside settings", params.storeId);
 
   if (!userId) {
     redirect("/sign-in");
@@ -19,11 +20,12 @@ const page = async ({ params }: SettingPagePropsI) => {
 
   const store = await prismaDb.store.findFirst({
     where: {
-      id: params.storeid,
+      id: params.storeId,
       userId,
     },
   });
 
+  console.log("Inside settings", params.storeId);
   if (!store) {
     redirect("/");
   }
