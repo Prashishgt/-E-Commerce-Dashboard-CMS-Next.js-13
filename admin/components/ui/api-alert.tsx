@@ -30,7 +30,6 @@ const ApiAlert = ({
   const onCopy = (descriptionArg: string) => {
     navigator.clipboard.writeText(descriptionArg);
     toast.success("API Route copied to the clipboard.");
-    console.log("Hello i am here", descriptionArg);
   };
 
   return (

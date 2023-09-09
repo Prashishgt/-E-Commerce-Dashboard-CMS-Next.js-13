@@ -46,7 +46,6 @@ const SettingsForm = ({ initialData }: SettingsFormPropsI) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
-  console.log(`/api/stores/${params.storeId}`);
   const onSubmit = async (data: SettingsFormValues) => {
     try {
       setLoading(true);

@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AlertModal from "@/components/modals/alert-modal";
-import ApiAlert from "@/components/ui/api-alert";
-import { UserOrigin } from "@/hooks/user-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
@@ -39,7 +37,6 @@ interface BillboardFormPropsI {
 const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
   const params = useParams();
   const router = useRouter();
-  const origin = UserOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -56,12 +53,10 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
       imageUrl: "",
     },
   });
-  console.log(`/api/${params.storeId}/billboards`);
-  console.log("I am here", `${params.billboardId}`);
   const onSubmit = async (data: BillboardFormValues) => {
     try {
       setLoading(true);
-      if (!initialData) {
+      if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/billboards/${params.billboardId}`,
           data
@@ -70,6 +65,7 @@ const BillboardForm = ({ initialData }: BillboardFormPropsI) => {
         await axios.post(`/api/${params.storeId}/billboards`, data);
       }
       router.refresh();
+      router.push(`/${params.storeId}/billboards`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");

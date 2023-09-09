@@ -12,7 +12,6 @@ interface SettingPagePropsI {
 
 const page = async ({ params }: SettingPagePropsI) => {
   const { userId } = auth();
-  console.log("Inside settings", params.storeId);
 
   if (!userId) {
     redirect("/sign-in");
@@ -25,7 +24,6 @@ const page = async ({ params }: SettingPagePropsI) => {
     },
   });
 
-  console.log("Inside settings", params.storeId);
   if (!store) {
     redirect("/");
   }

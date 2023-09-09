@@ -72,8 +72,6 @@ export async function PATCH(
   try {
     const { userId } = auth();
     const body = await req.json();
-    console.log("billboardid", params.storeId);
-    console.log("billboardid", params.billboardId);
     const { label, imageUrl } = body;
 
     if (!userId) {
