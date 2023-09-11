@@ -3,7 +3,7 @@ import BillboardClient from "./components/client";
 import prismaDb from "@/lib/prismadb";
 import { BillboardColumn } from "./components/columns";
 
-const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
+const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
   const billboards = await prismaDb.billboard.findMany({
     where: {
       storeId: params.storeId,
@@ -27,4 +27,4 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
   );
 };
 
-export default BillboardsPage;
+export default CategoriesPage;
