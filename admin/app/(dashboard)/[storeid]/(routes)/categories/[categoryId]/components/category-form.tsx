@@ -32,7 +32,7 @@ import AlertModal from "@/components/modals/alert-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  billboardId: z.string().min(1),
+  categoryId: z.string().min(1),
 });
 
 type CategoryFormValues = z.infer<typeof formSchema>;
@@ -58,7 +58,7 @@ const CategoryForm = ({ initialData, billboards }: CategoryFormPropsI) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      billboardId: "",
+      categoryId: "",
     },
   });
   const onSubmit = async (data: CategoryFormValues) => {
@@ -66,14 +66,14 @@ const CategoryForm = ({ initialData, billboards }: CategoryFormPropsI) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          `/api/${params.storeId}/categories/${params.categoryId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/categories`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      router.push(`/${params.storeId}/categories`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -86,14 +86,14 @@ const CategoryForm = ({ initialData, billboards }: CategoryFormPropsI) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
+        `/api/${params.storeId}/categories/${params.categoryId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
-      toast.success("Billboard Deleted");
+      router.push(`/${params.storeId}/categories`);
+      toast.success("Category Deleted");
     } catch (error) {
       toast.error(
-        "Make sure you remove all the category before attempting this action"
+        "Make sure you remove all the product before attempting this action"
       );
     } finally {
       setLoading(false);
@@ -151,7 +151,7 @@ const CategoryForm = ({ initialData, billboards }: CategoryFormPropsI) => {
             />
             <FormField
               control={form.control}
-              name="billboardId"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Billboard</FormLabel>
