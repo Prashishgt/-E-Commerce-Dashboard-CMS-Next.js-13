@@ -25,7 +25,6 @@ const CellAction = ({ data }: CellActionProps) => {
   const router = useRouter();
   const params = useParams();
 
-  console.log(data);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
