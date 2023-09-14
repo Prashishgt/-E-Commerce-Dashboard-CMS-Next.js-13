@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { CategoryColumn } from "./columns";
+import { SizeColumn } from "./columns";
 import AlertModal from "@/components/modals/alert-modal";
 
 import {
@@ -18,7 +18,7 @@ import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface CellActionProps {
-  data: CategoryColumn;
+  data: SizeColumn;
 }
 
 const CellAction = ({ data }: CellActionProps) => {
@@ -30,15 +30,15 @@ const CellAction = ({ data }: CellActionProps) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Category ID copied to the clipboard.");
+    toast.success("Size ID copied to the clipboard.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      await axios.delete(`/api/${params.storeId}/sizes/${data.id}`);
       router.refresh();
-      toast.success("Category Deleted");
+      toast.success("Size Deleted");
     } catch (error) {
       toast.error(
         "Make sure you remove all the products before attempting this action"
@@ -71,9 +71,7 @@ const CellAction = ({ data }: CellActionProps) => {
             Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`/${params.storeId}/categories/${data.id}`)
-            }
+            onClick={() => router.push(`/${params.storeId}/sizes/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" />
             Update

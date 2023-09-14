@@ -1,88 +1,42 @@
-import prismaDb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+
+import prismaDb from "@/lib/prismadb";
 
 export async function GET(
   req: Request,
   { params }: { params: { categoryId: string } }
 ) {
   try {
-    const { userId } = auth();
-
     if (!params.categoryId) {
-      return new NextResponse("Billboard Id is required", { status: 400 });
+      return new NextResponse("Category id is required", { status: 400 });
     }
 
     const category = await prismaDb.category.findUnique({
       where: {
         id: params.categoryId,
       },
+      include: {
+        billboard: true,
+      },
     });
 
     return NextResponse.json(category);
   } catch (error) {
     console.log("[CATEGORY_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
-) {
-  try {
-    const { userId } = auth();
-
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 400 });
-    }
-
-    if (!params.billboardId) {
-      return new NextResponse("Billboard Id is required", { status: 400 });
-    }
-
-    const storeByUserId = await prismaDb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
-    const billboard = await prismaDb.billboard.deleteMany({
-      where: {
-        id: params.billboardId,
-      },
-    });
-
-    return NextResponse.json(billboard);
-  } catch (error) {
-    console.log("[BILLBOARD_DELETE]", error);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
-}
-
-export async function PATCH(
-  req: Request,
   { params }: { params: { categoryId: string; storeId: string } }
 ) {
   try {
     const { userId } = auth();
-    const body = await req.json();
-    const { label, imageUrl } = body;
 
     if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 400 });
-    }
-
-    if (!label) {
-      return new NextResponse("Label is required", { status: 500 });
-    }
-    if (!imageUrl) {
-      return new NextResponse("Image URL is required", { status: 500 });
+      return new NextResponse("Unauthenticated", { status: 403 });
     }
 
     if (!params.categoryId) {
@@ -97,22 +51,75 @@ export async function PATCH(
     });
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+      return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const billboard = await prismaDb.billboard.updateMany({
+    const category = await prismaDb.category.delete({
+      where: {
+        id: params.categoryId,
+      },
+    });
+
+    return NextResponse.json(category);
+  } catch (error) {
+    console.log("[CATEGORY_DELETE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { categoryId: string; storeId: string } }
+) {
+  try {
+    const { userId } = auth();
+
+    const body = await req.json();
+
+    const { name, billboardId } = body;
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    if (!billboardId) {
+      return new NextResponse("Billboard ID is required, category ID", {
+        status: 400,
+      });
+    }
+
+    if (!name) {
+      return new NextResponse("Name is required", { status: 400 });
+    }
+
+    if (!params.categoryId) {
+      return new NextResponse("Category id is required", { status: 400 });
+    }
+
+    const storeByUserId = await prismaDb.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    });
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 });
+    }
+
+    const category = await prismaDb.category.updateMany({
       where: {
         id: params.categoryId,
       },
       data: {
-        label,
-        imageUrl,
+        name,
+        billboardId,
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(category);
   } catch (error) {
-    console.log("[BILLBOARD_PATCH]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    console.log("[CATEGORY_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
   }
 }
