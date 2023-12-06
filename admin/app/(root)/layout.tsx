@@ -8,6 +8,7 @@ type RootPropsI = {
 };
 
 const SetupLayout = async ({ children }: RootPropsI) => {
+  console.log("Rendering...");
   const { userId } = auth();
 
   if (!userId) {
