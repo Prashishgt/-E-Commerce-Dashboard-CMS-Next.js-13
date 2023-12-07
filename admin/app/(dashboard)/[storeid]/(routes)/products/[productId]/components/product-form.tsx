@@ -63,6 +63,7 @@ const ProductForm = ({
   colors,
   sizes,
 }: ProductFormPropsI) => {
+  console.log("Debugging", colors);
   const params = useParams();
   const router = useRouter();
 
