@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Container from "./ui/container";
+import MainNav from "./main-nav";
 
 const Navbar = () => {
   return (
@@ -9,6 +10,7 @@ const Navbar = () => {
           <Link href="/" className="ml-4 lg:ml-0 gap-x-2">
             <p className="font-bold text-xl">Store</p>
           </Link>
+          <MainNav data={[]} />
         </div>
       </Container>
     </div>
